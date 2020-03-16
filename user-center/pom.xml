@@ -62,6 +62,10 @@
         <!--feign spring-cloud-starter-openfeign-->
         <!--sentinel spring-cloud-starter-alibaba-sentinel-->
 
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
 
     </dependencies>
 
@@ -79,9 +83,9 @@
             <!--整合spring cloud alibaba-->
 
             <dependency>
-                <groupId>com.alibaba.cloud</groupId>
+                <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-alibaba-dependencies</artifactId>
-                <version>2.1.0.RELEASE</version>
+                <version>0.9.0.RELEASE</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

@@ -7,3 +7,12 @@ spring:
       # >= 6.x: com.mysql.cj.jdbc.Driver
       # <= 5.x: com.mysql.jdbc.Driver
       driver-class-name: com.mysql.cj.jdbc.Driver
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+
+  application:
+    # 服务名称尽量用-，不要用_，不要用特殊字符
+    name: user-center
