@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.2.5.RELEASE</version>
+        <version>2.1.5.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.stackingrule.usercenter</groupId>
@@ -56,8 +56,38 @@
             <scope>provided</scope>
         </dependency>
 
+        <!--spring-boot-starter-xxxx-->
+        <!--xxxx-spring-boot-starter-->
+        <!--spring-cloud-starter-{spring cloud子项目的名称}-[{模块名称}]-->
+        <!--feign spring-cloud-starter-openfeign-->
+        <!--sentinel spring-cloud-starter-alibaba-sentinel-->
+
 
     </dependencies>
+
+
+    <dependencyManagement>
+        <dependencies>
+            <!--整合spring cloud-->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>Greenwich.SR1</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!--整合spring cloud alibaba-->
+
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>2.1.0.RELEASE</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <plugins>
