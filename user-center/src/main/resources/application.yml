@@ -15,7 +15,7 @@ spring:
         # 指定 namespace
 #        namespace: 9d32c5e1-b7ce-4c59-a193-ce803002a02b
         # 指定集群名称
-#        cluster-name: NJ
+        cluster-name: NJ
 
   application:
     # 服务名称尽量用-，不要用_，不要用特殊字符
