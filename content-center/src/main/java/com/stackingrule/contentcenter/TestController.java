@@ -5,6 +5,7 @@ import com.stackingrule.contentcenter.dao.content.ShareMapper;
 import com.stackingrule.contentcenter.domain.dto.user.UserDTO;
 import com.stackingrule.contentcenter.domain.entity.content.Share;
 
+import com.stackingrule.contentcenter.feignclient.TestBaiduFeignClient;
 import com.stackingrule.contentcenter.feignclient.TestUserCenterFeignClient;
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,6 +35,9 @@ public class TestController {
 
     @Autowired
     private TestUserCenterFeignClient testUserCenterFeignClient;
+
+    @Autowired
+    private TestBaiduFeignClient testBaiduFeignClient;
 
     @GetMapping("/test")
     public List<Share> testInsert() {
@@ -69,6 +73,11 @@ public class TestController {
     @GetMapping("/test-get")
     public UserDTO query(UserDTO userDTO) {
         return testUserCenterFeignClient.query(userDTO);
+    }
+
+    @GetMapping("/baidu")
+    public String baiduIndex() {
+        return this.testBaiduFeignClient.index();
     }
 
 
