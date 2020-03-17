@@ -56,3 +56,11 @@ feign:
     max-connections: 200
     # # feign 单个路径的最大连接数
     max-connections-per-route: 50
+
+
+# actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
