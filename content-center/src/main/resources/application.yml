@@ -39,3 +39,9 @@ ribbon:
 logging:
   level:
     com.stackingrule.contentcenter.feignclient.UserCenterFeignClient: debug
+feign:
+  client:
+    config:
+      # 想要调用的微服务名称
+      user-center:
+        loggerLevel: full
