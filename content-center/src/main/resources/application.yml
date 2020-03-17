@@ -15,6 +15,7 @@ spring:
         server-addr: localhost:8848
         cluster-name: BJ
         # namespace:
+#        metadata:
 
 
 

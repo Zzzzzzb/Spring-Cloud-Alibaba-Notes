@@ -4,6 +4,7 @@ import com.stackingrule.contentcenter.dao.content.ShareMapper;
 import com.stackingrule.contentcenter.domain.dto.content.ShareDTO;
 import com.stackingrule.contentcenter.domain.dto.user.UserDTO;
 import com.stackingrule.contentcenter.domain.entity.content.Share;
+import com.stackingrule.contentcenter.feignclient.UserCenterFeignClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -20,6 +21,8 @@ public class ShareService {
 
     private final RestTemplate restTemplate;
 
+    private final UserCenterFeignClient userCenterFeignClient;
+
 
     public ShareDTO findById(Integer id) {
         // 获取分享详情
@@ -28,13 +31,7 @@ public class ShareService {
         Integer userId = share.getUserId();
 
         // 用户中心所有实例信息
-
-
-        UserDTO userDTO = restTemplate.getForObject(
-                "http://user-center/users/{id}",
-                UserDTO.class,
-                userId
-        );
+        UserDTO userDTO = this.userCenterFeignClient.findById(userId);
 
         // 消息装配
         ShareDTO shareDTO = new ShareDTO();
