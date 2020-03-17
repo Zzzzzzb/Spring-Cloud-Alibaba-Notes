@@ -35,3 +35,7 @@ ribbon:
   eager-load:
     enabled: true
     clients: user-center
+
+logging:
+  level:
+    com.stackingrule.contentcenter.feignclient.UserCenterFeignClient: debug
