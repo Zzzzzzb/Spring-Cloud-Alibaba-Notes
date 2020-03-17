@@ -48,3 +48,11 @@ logging:
 #      # 想要调用的微服务名称
 #      user-center:
 #        loggerLevel: full
+feign:
+  httpclient:
+    # 让 feign 使用 apache htpclient 做请求，而不是默认的urlconnection
+    enabled: true
+    # feign 的最大连接数
+    max-connections: 200
+    # # feign 单个路径的最大连接数
+    max-connections-per-route: 50
