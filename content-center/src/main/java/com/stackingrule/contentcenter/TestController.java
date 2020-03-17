@@ -2,8 +2,10 @@ package com.stackingrule.contentcenter;
 
 
 import com.stackingrule.contentcenter.dao.content.ShareMapper;
+import com.stackingrule.contentcenter.domain.dto.user.UserDTO;
 import com.stackingrule.contentcenter.domain.entity.content.Share;
 
+import com.stackingrule.contentcenter.feignclient.TestUserCenterFeignClient;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,9 @@ public class TestController {
 
     @Autowired
     private DiscoveryClient discoveryClient;
+
+    @Autowired
+    private TestUserCenterFeignClient testUserCenterFeignClient;
 
     @GetMapping("/test")
     public List<Share> testInsert() {
@@ -59,6 +64,11 @@ public class TestController {
         // 查询指定服务的所有实例信息
         return this.discoveryClient.getInstances("user-center");
 
+    }
+
+    @GetMapping("/test-get")
+    public UserDTO query(UserDTO userDTO) {
+        return testUserCenterFeignClient.query(userDTO);
     }
 
 
