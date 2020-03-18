@@ -1,7 +1,10 @@
 package com.stackingrule.contentcenter;
 
 
+import com.alibaba.csp.sentinel.Entry;
+import com.alibaba.csp.sentinel.SphU;
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
+import com.alibaba.csp.sentinel.slots.block.BlockException;
 import com.alibaba.csp.sentinel.slots.block.RuleConstant;
 import com.alibaba.csp.sentinel.slots.block.flow.FlowRule;
 import com.alibaba.csp.sentinel.slots.block.flow.FlowRuleManager;
@@ -13,6 +16,7 @@ import com.stackingrule.contentcenter.feignclient.TestBaiduFeignClient;
 import com.stackingrule.contentcenter.feignclient.TestUserCenterFeignClient;
 import lombok.extern.slf4j.Slf4j;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
@@ -111,6 +115,31 @@ public class TestController {
         rule.setLimitApp("default");
         rules.add(rule);
         FlowRuleManager.loadRules(rules);
+    }
+
+
+    @GetMapping("/test-sentinel-api")
+    public String testSentinelAPI(@RequestParam(required = false) String a) {
+        // 定义一个sentinel保护资源，名称为test-sentinel-api
+        Entry entry = null;
+        try {
+            entry = SphU.entry("test-sentinel-api");
+            // 被保护的业务逻辑
+            if (StringUtils.isBlank(a)) {
+                throw new IllegalArgumentException("a不能为空!");
+            }
+            return a;
+        }
+        // 如果被保护的资源被限流或降级了，会抛出BlockException
+        catch (BlockException e) {
+            log.warn("限流或降级了：", e);
+            return "限流或降级了!";
+        }
+        finally {
+            if (entry != null) {
+                entry.exit();
+            }
+        }
     }
 
 
