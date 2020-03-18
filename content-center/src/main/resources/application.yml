@@ -72,3 +72,7 @@ management:
         include: '*'
 
 # sentinel 控制台 整合
+resttemplate:
+  sentinel:
+    # 关闭 @SentinelRestTemplate注解
+    enabled: true
