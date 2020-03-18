@@ -55,6 +55,9 @@ logging:
 #      user-center:
 #        loggerLevel: full
 feign:
+  sentinel:
+    # 为Feign整合sentinel
+    enable: true
   httpclient:
     # 让 feign 使用 apache htpclient 做请求，而不是默认的urlconnection
     enabled: true
