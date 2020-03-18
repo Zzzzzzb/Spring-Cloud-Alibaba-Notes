@@ -3,7 +3,9 @@ package com.stackingrule.contentcenter;
 
 import com.alibaba.csp.sentinel.Entry;
 import com.alibaba.csp.sentinel.SphU;
+import com.alibaba.csp.sentinel.Tracer;
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
+import com.alibaba.csp.sentinel.context.ContextUtil;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
 import com.alibaba.csp.sentinel.slots.block.RuleConstant;
 import com.alibaba.csp.sentinel.slots.block.flow.FlowRule;
@@ -14,6 +16,7 @@ import com.stackingrule.contentcenter.domain.entity.content.Share;
 
 import com.stackingrule.contentcenter.feignclient.TestBaiduFeignClient;
 import com.stackingrule.contentcenter.feignclient.TestUserCenterFeignClient;
+import com.stackingrule.contentcenter.sentineltest.TestControllerBlockHandlerClass;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang3.StringUtils;
@@ -119,27 +122,62 @@ public class TestController {
 
 
     @GetMapping("/test-sentinel-api")
-    public String testSentinelAPI(@RequestParam(required = false) String a) {
-        // 定义一个sentinel保护资源，名称为test-sentinel-api
+    public String testSentinelAPI(
+            @RequestParam(required = false) String a) {
+
+        String resourceName = "test-sentinel-api";
+        ContextUtil.enter(resourceName, "test-wfw");
+
+        // 定义一个sentinel保护的资源，名称是test-sentinel-api
         Entry entry = null;
         try {
-            entry = SphU.entry("test-sentinel-api");
+
+            entry = SphU.entry(resourceName);
             // 被保护的业务逻辑
             if (StringUtils.isBlank(a)) {
-                throw new IllegalArgumentException("a不能为空!");
+                throw new IllegalArgumentException("a不能为空");
             }
             return a;
         }
-        // 如果被保护的资源被限流或降级了，会抛出BlockException
+        // 如果被保护的资源被限流或者降级了，就会抛BlockException
         catch (BlockException e) {
-            log.warn("限流或降级了：", e);
-            return "限流或降级了!";
-        }
-        finally {
+            log.warn("限流，或者降级了", e);
+            return "限流，或者降级了";
+        } catch (IllegalArgumentException e2) {
+            // 统计IllegalArgumentException【发生的次数、发生占比...】
+            Tracer.trace(e2);
+            return "参数非法！";
+        } finally {
             if (entry != null) {
+                // 退出entry
                 entry.exit();
             }
+            ContextUtil.exit();
         }
+
+    }
+
+    @GetMapping("/test-sentinel-resource")
+    @SentinelResource(value = "test-sentinel-api",
+            blockHandler = "block",
+            blockHandlerClass = TestControllerBlockHandlerClass.class,
+            fallback = "fallback")
+    public String testSentinelResource(@RequestParam(required = false) String a) {
+        if (StringUtils.isBlank(a)) {
+            throw new IllegalArgumentException("a cannot be blank.");
+        }
+        return a;
+    }
+
+
+    /**
+     * <h2>处理降级</h2>
+     * - sentinel 1.6 可以处理Throwable
+     * @param a
+     * @return
+     */
+    public String fallback(String a) {
+        return "限流，或者降级了 fallback";
     }
 
 
