@@ -2,6 +2,9 @@ package com.stackingrule.contentcenter;
 
 
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
+import com.alibaba.csp.sentinel.slots.block.RuleConstant;
+import com.alibaba.csp.sentinel.slots.block.flow.FlowRule;
+import com.alibaba.csp.sentinel.slots.block.flow.FlowRuleManager;
 import com.stackingrule.contentcenter.dao.content.ShareMapper;
 import com.stackingrule.contentcenter.domain.dto.user.UserDTO;
 import com.stackingrule.contentcenter.domain.entity.content.Share;
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -88,6 +92,25 @@ public class TestController {
     public String testHot(@RequestParam(required = false) String a,
                           @RequestParam(required = false) String b) {
         return a + " " + b;
+    }
+
+
+
+    @GetMapping("test-add-flow-rule")
+    public String testHot() {
+        this.initFlowQpsRule();
+        return "success";
+    }
+
+    private void initFlowQpsRule() {
+        List<FlowRule> rules = new ArrayList<>();
+        FlowRule rule = new FlowRule("/shares/1");
+
+        rule.setCount(20);
+        rule.setGrade(RuleConstant.FLOW_GRADE_QPS);
+        rule.setLimitApp("default");
+        rules.add(rule);
+        FlowRuleManager.loadRules(rules);
     }
 
 
