@@ -30,7 +30,8 @@ spring:
         output:
           # 用来指定topic
           destination: stream-test-topic
-
+        my-output:
+          destination: stream-my-topic
 
 
   application:

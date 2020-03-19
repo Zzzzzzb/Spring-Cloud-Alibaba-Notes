@@ -16,6 +16,7 @@ import com.stackingrule.contentcenter.domain.entity.content.Share;
 
 import com.stackingrule.contentcenter.feignclient.TestBaiduFeignClient;
 import com.stackingrule.contentcenter.feignclient.TestUserCenterFeignClient;
+import com.stackingrule.contentcenter.rocketmq.MySource;
 import com.stackingrule.contentcenter.sentineltest.TestControllerBlockHandlerClass;
 import lombok.extern.slf4j.Slf4j;
 
@@ -61,6 +62,9 @@ public class TestController {
 
     @Autowired
     private Source source;
+
+    @Autowired
+    private MySource mySource;
 
     @GetMapping("/test")
     public List<Share> testInsert() {
@@ -206,6 +210,18 @@ public class TestController {
                         MessageBuilder
                             .withPayload("消息体")
                             .build()
+                );
+
+        return "success";
+    }
+
+    @GetMapping("/test-stream2")
+    public String testStream2() {
+        this.mySource.output()
+                .send(
+                        MessageBuilder
+                                .withPayload("消息体")
+                                .build()
                 );
 
         return "success";

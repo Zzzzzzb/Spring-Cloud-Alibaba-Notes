@@ -2,6 +2,7 @@ package com.stackingrule.contentcenter;
 
 
 import com.stackingrule.contentcenter.configuration.GlobalFeignConfiguration;
+import com.stackingrule.contentcenter.rocketmq.MySource;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.alibaba.sentinel.annotation.SentinelRestTemplate;
@@ -15,7 +16,7 @@ import tk.mybatis.spring.annotation.MapperScan;
 
 @MapperScan("com.stackingrule.contentcenter.dao")
 @EnableFeignClients(defaultConfiguration = GlobalFeignConfiguration.class)
-@EnableBinding(Source.class)
+@EnableBinding({Source.class, MySource.class})
 @SpringBootApplication
 public class ContentCenterApplication {
 
