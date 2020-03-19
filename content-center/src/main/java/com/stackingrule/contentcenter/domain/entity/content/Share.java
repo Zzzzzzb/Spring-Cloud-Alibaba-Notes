@@ -1,8 +1,17 @@
 package com.stackingrule.contentcenter.domain.entity.content;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.Date;
 import javax.persistence.*;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Data
 @Table(name = "share")
 public class Share {
     /**
