@@ -25,6 +25,10 @@ spring:
             destination: stream-test-topic
             # 一定要设置
             group: binder-group
+          my-input:
+            destination: stream-my-input
+            group: my-group
+
 
   application:
     # 服务名称尽量用-，不要用_，不要用特殊字符
@@ -38,3 +42,6 @@ rocketmq:
   name-server: 127.0.0.1:9876
 
 
+logging:
+  level:
+    com.alibaba.nacos: error
