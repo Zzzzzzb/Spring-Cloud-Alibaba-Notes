@@ -1,5 +1,6 @@
 package com.stackingrule.contentcenter.rocketmq;
 
+import com.alibaba.fastjson.JSON;
 import com.stackingrule.contentcenter.dao.messaging.RocketmqTransactionLogMapper;
 import com.stackingrule.contentcenter.domain.dto.content.ShareAuditDTO;
 import com.stackingrule.contentcenter.domain.entity.messaging.RocketmqTransactionLog;
@@ -26,8 +27,11 @@ public class AddBonusTransactionListener implements RocketMQLocalTransactionList
         String transactionId = (String) headers.get(RocketMQHeaders.TRANSACTION_ID);
         Integer shareId = Integer.valueOf((String) headers.get("share_id"));
 
+        //
+        String dtoString = (String) headers.get("dto");
+        ShareAuditDTO auditDTO = JSON.parseObject(dtoString, ShareAuditDTO.class);
         try {
-            this.shareService.auditByIdWithRocketMqLog(shareId, (ShareAuditDTO) o, transactionId);
+            this.shareService.auditByIdWithRocketMqLog(shareId, auditDTO, transactionId);
             return RocketMQLocalTransactionState.COMMIT;
         } catch (Exception e) {
             return RocketMQLocalTransactionState.ROLLBACK;

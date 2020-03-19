@@ -1,5 +1,6 @@
 package com.stackingrule.contentcenter.service.content;
 
+import com.alibaba.fastjson.JSON;
 import com.stackingrule.contentcenter.dao.content.ShareMapper;
 import com.stackingrule.contentcenter.dao.messaging.RocketmqTransactionLogMapper;
 import com.stackingrule.contentcenter.domain.dto.content.ShareAuditDTO;
@@ -16,6 +17,7 @@ import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.apache.rocketmq.spring.support.RocketMQHeaders;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.stream.messaging.Source;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,6 +40,8 @@ public class ShareService {
     private final RocketMQTemplate rocketMQTemplate;
 
     private final RocketmqTransactionLogMapper rocketmqTransactionLogMapper;
+
+    private final Source source;
 
 
     public ShareDTO findById(Integer id) {
@@ -73,9 +77,8 @@ public class ShareService {
         if (AuditStatusEnum.PASS.equals(auditDTO.getAuditStatusEnum())) {
             // 发送半消息
             String transactionId = UUID.randomUUID().toString();
-            this.rocketMQTemplate.sendMessageInTransaction(
-                    "tx-add-bonus",
-                    "add-bonus",
+
+            this.source.output().send(
                     MessageBuilder.withPayload(UserAddBonusMsgDTO
                             .builder()
                             .userId(share.getUserId())
@@ -84,9 +87,10 @@ public class ShareService {
                     )
                             .setHeader(RocketMQHeaders.TRANSACTION_ID, UUID.randomUUID().toString())
                             .setHeader("share_id", id)
-                    .build(),
-                    auditDTO
+                            .setHeader("dto", JSON.toJSONString(auditDTO))
+                            .build()
             );
+
         } else {
             this.auditByIdInDB(id, auditDTO);
         }
