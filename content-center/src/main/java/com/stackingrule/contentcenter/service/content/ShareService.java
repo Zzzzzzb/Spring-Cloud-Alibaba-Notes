@@ -3,11 +3,13 @@ package com.stackingrule.contentcenter.service.content;
 import com.stackingrule.contentcenter.dao.content.ShareMapper;
 import com.stackingrule.contentcenter.domain.dto.content.ShareAuditDTO;
 import com.stackingrule.contentcenter.domain.dto.content.ShareDTO;
+import com.stackingrule.contentcenter.domain.dto.messaging.UserAddBonusMsgDTO;
 import com.stackingrule.contentcenter.domain.dto.user.UserDTO;
 import com.stackingrule.contentcenter.domain.entity.content.Share;
 import com.stackingrule.contentcenter.feignclient.UserCenterFeignClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,8 @@ public class ShareService {
     private final RestTemplate restTemplate;
 
     private final UserCenterFeignClient userCenterFeignClient;
+
+    private final RocketMQTemplate rocketMQTemplate;
 
 
     public ShareDTO findById(Integer id) {
@@ -58,9 +62,16 @@ public class ShareService {
         // 2.审核资源，将状态设置为PASS/REJECT
         share.setAuditStatus(auditDTO.getAuditStatusEnum().toString());
         this.shareMapper.updateByPrimaryKey(share);
-        // 3. 如果是PASS，给发布人添加积分
-        userCenterFeignClient.add
+        // 3. 如果是PASS，发送消息给rocketMQ，给发布人添加积分
+        this.rocketMQTemplate.convertAndSend("add-bonus",
+                UserAddBonusMsgDTO
+                        .builder()
+                        .userId(share.getUserId())
+                        .bonus(50)
+                        .build()
+        );
 
+        return share;
 
     }
 
