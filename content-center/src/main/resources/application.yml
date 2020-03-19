@@ -19,9 +19,9 @@ spring:
       transport:
         # 指定 sentinel 控制台 地址
         dashboard: localhost:8080
-        # 关闭对SpringMVC端点的控制
+        # 打开对SpringMVC端点的控制
       filter:
-        enabled: false
+        enabled: true
 
 
 
