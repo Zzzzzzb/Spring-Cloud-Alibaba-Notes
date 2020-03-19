@@ -22,6 +22,14 @@ spring:
         # 打开对SpringMVC端点的控制
       filter:
         enabled: true
+    stream:
+      rocketmq:
+        binder:
+          name-server: 127.0.0.1:9876
+      bindings:
+        output:
+          # 用来指定topic
+          destination: stream-test-topic
 
 
 
@@ -48,6 +56,7 @@ ribbon:
 logging:
   level:
     com.stackingrule.contentcenter.feignclient.UserCenterFeignClient: debug
+    com.alibaba.nacos: error
 #feign:
 #  client:
 #    config:
@@ -84,3 +93,4 @@ rocketmq:
   producer:
     # 必须指定group
     group: test-group
+

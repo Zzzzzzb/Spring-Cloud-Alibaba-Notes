@@ -25,6 +25,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.cloud.stream.messaging.Source;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import org.springframework.web.bind.annotation.PathVariable;
@@ -56,6 +58,9 @@ public class TestController {
 
     @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    private Source source;
 
     @GetMapping("/test")
     public List<Share> testInsert() {
@@ -194,5 +199,16 @@ public class TestController {
                 UserDTO.class, userId);
     }
 
+    @GetMapping("/test-stream")
+    public String testStream() {
+        this.source.output()
+                .send(
+                        MessageBuilder
+                            .withPayload("消息体")
+                            .build()
+                );
+
+        return "success";
+    }
 
 }
