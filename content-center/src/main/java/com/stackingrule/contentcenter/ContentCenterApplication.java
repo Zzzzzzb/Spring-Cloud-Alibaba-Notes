@@ -13,6 +13,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 import tk.mybatis.spring.annotation.MapperScan;
 
+import java.util.Collections;
+
 @MapperScan("com.stackingrule.contentcenter.dao")
 @EnableFeignClients(defaultConfiguration = GlobalFeignConfiguration.class)
 @EnableBinding({Source.class})
@@ -24,7 +26,14 @@ public class ContentCenterApplication {
     @LoadBalanced
     @SentinelRestTemplate
     public RestTemplate restTemplate() {
-        return new RestTemplate();
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.setInterceptors(
+                Collections.singletonList(
+                        new TestRestTemplateTokenRelayInterceptor()
+                )
+        );
+
+        return restTemplate;
     }
 
     public static void main(String[] args) {
