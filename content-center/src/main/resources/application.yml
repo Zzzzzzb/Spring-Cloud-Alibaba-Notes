@@ -73,12 +73,19 @@ feign:
     # 为Feign整合sentinel
     enable: true
   httpclient:
-    # 让 feign 使用 apache htpclient 做请求，而不是默认的urlconnection
+    # 让 feign 使用 apache httpclient 做请求，而不是默认的urlconnection
     enabled: true
     # feign 的最大连接数
     max-connections: 200
     # # feign 单个路径的最大连接数
     max-connections-per-route: 50
+  client:
+    config:
+      # 全局配置
+      default:
+        loggerLevel: full
+        requestInterceptors:
+          - com.stackingrule.contentcenter.feignclient.interceptor.TokenRelayRequestInterceptor
 
 
 # actuator
