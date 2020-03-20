@@ -1,5 +1,6 @@
 package com.stackingrule.contentcenter.controller.content;
 
+import com.stackingrule.contentcenter.auth.CheckLogin;
 import com.stackingrule.contentcenter.domain.dto.content.ShareDTO;
 import com.stackingrule.contentcenter.service.content.ShareService;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +18,10 @@ public class ShareController {
     private final ShareService shareService;
 
     @GetMapping("/{id}")
+    @CheckLogin
     public ShareDTO findById(@PathVariable Integer id) {
 
         return this.shareService.findById(id);
     }
+
 }
