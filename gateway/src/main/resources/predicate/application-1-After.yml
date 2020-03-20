@@ -10,13 +10,17 @@ spring:
     gateway:
       discovery:
         locator:
-          # ��gatewayͨ������������ҵ�������΢����
+          # 让gateway通过服务发现组件找到其他的微服务
           enabled: true
       routes:
         - id: after_route
           uri: lb://user-center
           predicates:
-            - TimeBetween=����9:00, ����11:00
+            # 当且仅当请求时的时间After配置的时间时，才会转发到用户微服务
+            # 目前配置不会进该路由配置，所以返回404
+            # 将时间改成 < now的时间，则访问localhost:8040/** -> user-center/**
+            # eg. 访问http://localhost:8040/users/1 -> user-center/users/1
+            - After=2030-01-20T17:42:47.789-07:00[America/Denver]
 management:
   endpoints:
     web:

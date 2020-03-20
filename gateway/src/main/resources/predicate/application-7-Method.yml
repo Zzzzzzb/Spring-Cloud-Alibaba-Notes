@@ -10,13 +10,16 @@ spring:
     gateway:
       discovery:
         locator:
-          # ÈÃgatewayÍ¨¹ý·þÎñ·¢ÏÖ×é¼þÕÒµ½ÆäËûµÄÎ¢·þÎñ
+          # è®©gatewayé€šè¿‡æœåŠ¡å‘çŽ°ç»„ä»¶æ‰¾åˆ°å…¶ä»–çš„å¾®æœåŠ¡
           enabled: true
       routes:
-        - id: after_route
+        - id: method_route
           uri: lb://user-center
           predicates:
-            - TimeBetween=ÉÏÎç9:00, ÏÂÎç11:00
+            # å½“ä¸”ä»…å½“HTTPè¯·æ±‚æ–¹æ³•æ˜¯GETæ—¶ï¼Œæ‰ä¼šè½¬å‘ç”¨æˆ·å¾®æœåŠ¡
+            # å¦‚è¯·æ±‚æ–¹æ³•æ»¡è¶³æ¡ä»¶ï¼Œè®¿é—®http://localhost:8040/** -> user-center/**
+            # eg. è®¿é—®http://localhost:8040/users/1 -> user-center/users/1
+            - Method=GET
 management:
   endpoints:
     web:

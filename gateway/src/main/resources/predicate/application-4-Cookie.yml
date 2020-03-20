@@ -10,13 +10,16 @@ spring:
     gateway:
       discovery:
         locator:
-          # ÈÃgatewayÍ¨¹ý·þÎñ·¢ÏÖ×é¼þÕÒµ½ÆäËûµÄÎ¢·þÎñ
+          # è®©gatewayé€šè¿‡æœåŠ¡å‘çŽ°ç»„ä»¶æ‰¾åˆ°å…¶ä»–çš„å¾®æœåŠ¡
           enabled: true
       routes:
-        - id: after_route
+        - id: cookie_route
           uri: lb://user-center
           predicates:
-            - TimeBetween=ÉÏÎç9:00, ÏÂÎç11:00
+            # å½“ä¸”ä»…å½“å¸¦æœ‰åä¸ºsomecookieï¼Œå¹¶ä¸”å€¼ç¬¦åˆæ­£åˆ™ch.pçš„Cookieæ—¶ï¼Œæ‰ä¼šè½¬å‘åˆ°ç”¨æˆ·å¾®æœåŠ¡
+            # å¦‚Cookieæ»¡è¶³æ¡ä»¶ï¼Œåˆ™è®¿é—®http://localhost:8040/** -> user-center/**
+            # eg. è®¿é—®http://localhost:8040/users/1 -> user-center/users/1
+            - Cookie=somecookie, ch.p
 management:
   endpoints:
     web:
