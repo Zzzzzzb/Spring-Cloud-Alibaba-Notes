@@ -97,6 +97,13 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!--         微信小程序     -->
+        <dependency>
+            <groupId>com.github.binarywang</groupId>
+            <artifactId>weixin-java-miniapp</artifactId>
+            <version>3.5.0</version>
+        </dependency>
+
     </dependencies>
 
 

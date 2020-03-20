@@ -3,6 +3,7 @@ package com.stackingrule.usercenter.service.user;
 import com.stackingrule.usercenter.dao.bonus.BonusEventLogMapper;
 import com.stackingrule.usercenter.dao.user.UserMapper;
 import com.stackingrule.usercenter.domain.dto.messaging.UserAddBonusMsgDTO;
+import com.stackingrule.usercenter.domain.dto.user.UserLoginDTO;
 import com.stackingrule.usercenter.domain.entity.bonus.BonusEventLog;
 import com.stackingrule.usercenter.domain.entity.user.User;
 import lombok.RequiredArgsConstructor;
@@ -50,4 +51,32 @@ public class UserService {
         );
         log.info("积分添加完毕...");
     }
+
+    public User login(UserLoginDTO loginDTO, String openId) {
+
+        User user = this.userMapper.selectOne(
+                User.builder()
+                .wxId(openId)
+                .build()
+        );
+        if (user == null) {
+            User userToSave = User.builder()
+                    .wxId(openId)
+                    .bonus(300)
+                    .wxNickname(loginDTO.getWxNickname())
+                    .avatarUrl(loginDTO.getAvatarUrl())
+                    .roles("user")
+                    .createTime(new Date())
+                    .updateTime(new Date())
+                    .build();
+
+            this.userMapper.insertSelective(userToSave);
+
+            return userToSave;
+
+        }
+
+        return user;
+    }
+
 }
