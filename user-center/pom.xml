@@ -104,9 +104,11 @@
             <version>3.5.0</version>
         </dependency>
 
+
+<!--        zipkin 包含 spring-cloud-starter-sleuth    -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-sleuth</artifactId>
+            <artifactId>spring-cloud-starter-zipkin</artifactId>
         </dependency>
 
         <dependency>
