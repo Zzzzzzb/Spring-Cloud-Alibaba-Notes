@@ -20,6 +20,15 @@ spring:
           filters:
             - AddRequestHeader=X-Request-Foo, Bar
             - PreLog=a, b
+
+  zipkin:
+    base-url: http://localhost:9411/
+    discoveryClientNnabled: false
+  sleuth:
+    sampler:
+      # ³éÑùÂÊ
+      probability: 1.0
+
 management:
   endpoints:
     web:

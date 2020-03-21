@@ -116,6 +116,12 @@
             <scope>runtime</scope>
         </dependency>
 
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-zipkin</artifactId>
+        </dependency>
+
 <!--        AOP         -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
