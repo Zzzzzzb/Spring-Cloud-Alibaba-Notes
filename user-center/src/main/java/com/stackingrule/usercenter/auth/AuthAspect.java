@@ -59,7 +59,7 @@ public class AuthAspect {
         return attributes.getRequest();
     }
 
-    @Around("@annotation(com.stackingrule.contentcenter.auth.CheckAuthorization)")
+    @Around("@annotation(com.stackingrule.usercenter.auth.CheckAuthorization)")
     public Object checkAuthorization(ProceedingJoinPoint point) throws Throwable {
 
         try {

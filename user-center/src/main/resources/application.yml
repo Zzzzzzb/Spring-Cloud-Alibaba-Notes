@@ -40,6 +40,7 @@ server:
 logging:
   level:
     com.alibaba.nacos: error
+    com.springframework.cloud.sleuth: debug
 
 jwt:
   secret: aaaaaaabbbbbbcccccdddddaaaaaaabbbbbbcccccdddddaaaaaaabbbbbbcccccddddd
