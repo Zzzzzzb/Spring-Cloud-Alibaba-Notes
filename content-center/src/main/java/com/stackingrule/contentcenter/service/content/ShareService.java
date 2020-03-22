@@ -1,6 +1,8 @@
 package com.stackingrule.contentcenter.service.content;
 
 import com.alibaba.fastjson.JSON;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.stackingrule.contentcenter.dao.content.ShareMapper;
 import com.stackingrule.contentcenter.dao.messaging.RocketmqTransactionLogMapper;
 import com.stackingrule.contentcenter.domain.dto.content.ShareAuditDTO;
@@ -13,6 +15,8 @@ import com.stackingrule.contentcenter.domain.entity.messaging.RocketmqTransactio
 import com.stackingrule.contentcenter.feignclient.UserCenterFeignClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.LifecycleState;
+import org.apache.ibatis.annotations.Param;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.apache.rocketmq.spring.support.RocketMQHeaders;
 import org.springframework.beans.BeanUtils;
@@ -23,6 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -124,4 +129,12 @@ public class ShareService {
     }
 
 
+    public PageInfo<Share> q(String title, Integer pageNo, Integer pageSize) {
+        // 开始分页
+        PageHelper.startPage(pageNo, pageSize);
+
+        List<Share> shares = this.shareMapper.selectByParam(@Param("title") title);
+
+        return new PageInfo<Share>(shares);
+    }
 }
